@@ -1,90 +1,91 @@
 #include <stdio.h>
 #include <stdlib.h>
-#include <stdbool.h>
 #include <time.h>
+#include <stdbool.h>
+//1=Rock
+//2=paper
+//3=scissors
+char processing(char user_answer);
+int random_computer_choice;
+int user_answer;
 int counter=0;
-int answer;
-int random_number;
-int checking_procedure(char answer);
-void random_no(int lower,int upper);
 int main()
 {
-    int upper_limit;
-    int lower_limit;
-    bool checking_value=true;
-    int answer_checked;
-    int user_repeatition_answer;
-    bool again=true;
-    printf("Guess the Number Game\n");
-    while (again){
-        printf("Please enter the limit:\n");
-        scanf("%d",&lower_limit);
-        scanf("%d",&upper_limit);
-        while (true){
-            if(lower_limit>upper_limit){
-                printf("Please enter the lower limit first\n");
-                scanf("%d",&lower_limit);
-                scanf("%d",&upper_limit);
+    int output;
+    int again;
+    printf("Hello to Rock Paper Scissors Game!\n");
+    while (true){
+            printf("Please enter 1 for rock, 2 for paper , or 3 for scissors\n");
+            srand(time(0));
+            random_computer_choice= rand()%3+1;
+            scanf("%d",&user_answer);
+            output=processing(user_answer);
+            while (true){
+                    if(output==2){
+                        printf("Please enter a valid input\n");
+                        scanf("%d",&user_answer);
+                        output=processing(user_answer);
+                        }
+                    else{
+                        break;
+                    }
             }
-            else{
-                break;
+            if(output==1){
+                    printf("You won, the computer chose: %d\n",random_computer_choice);
+                    printf("You took %d attempts to beat the computer\n",counter);
+             }
+            else if(output==0){
+                    printf("You lost, the computer chose: %d\n",random_computer_choice);
             }
-        }
-        while(true){
-            if (upper_limit-lower_limit<10){
-                printf("Small range enter a bigger one\n");
-                scanf("%d",&lower_limit);
-                scanf("%d",&upper_limit);
+            else if(output==-1){
+                    printf("You and the computer have similar minds: %d\n",random_computer_choice);
             }
-            else{
-                break;
-            }
-        }
-        printf("You have selected a number between %d and %d \n",lower_limit,upper_limit);
-        printf("Try to guess the number\n");
-        srand(time(0));
-        random_number=(rand()%(upper_limit+lower_limit));
-        scanf("%d",&answer);
-        answer_checked=checking_procedure(answer);
-        printf("Do you want to play again? (1 for yes,0 for no)\n");
-        scanf("%d",&user_repeatition_answer);
-        while(true){
-                if (user_repeatition_answer==1 || user_repeatition_answer==0){
+            printf("Do you want to play again?(Enter 1 for yes 0 for no)\n");
+            scanf("%d",&again);
+            while(true){
+                if(again==1 || again==0){
                     break;
+                }
+                else{
+                    printf("Please enter a valid input\n");
+                    scanf("%d",&again);
+                }
             }
-                else {
-                    printf("please enter a valid input\n");
-                    scanf(" %d",&user_repeatition_answer);
-            }
-        }
-
-        if (user_repeatition_answer==1){
-            again=true;
-            counter=0;
-        }
-        else if(user_repeatition_answer==0){
+            if(again==0){
                 break;
-        }
+            }
+
     }
     return 0;
 }
-int checking_procedure(char answer){
-    while (true){
-        if (answer==random_number){
-            printf("Congratulations! You guessed the correct number (%d) in %d attempts\n",answer,counter);
-            break;
-        }
-        else if(answer>random_number){
-             printf("Too high. Try again\n");
-             scanf("%d",&answer);
-             counter+=1;
-        }
-        else{
-            printf("Too low. Try again\n");
-            scanf("%d",&answer);
-            counter+=1;
-        }
+char processing(char user_answer){
+    if (user_answer==random_computer_choice){
+        counter++;
+        return -1;
+    }
+    else if (user_answer==1 && random_computer_choice==2){
+        counter++;
+        return 0;
 
     }
-    return counter;
+    else if (user_answer==1 && random_computer_choice==3){
+        return 1;
+    }
+    else if (user_answer==2 && random_computer_choice==1){
+        return 1;
+    }
+    else if (user_answer==2 && random_computer_choice==3){
+        counter++;
+        return 0;
+    }
+    else if (user_answer==3 && random_computer_choice==1){
+        counter++;
+        return 0;
+    }
+    else if (user_answer==3 && random_computer_choice==2){
+        return 1;
+    }
+    else{
+        return 2;
+    }
 }
